@@ -12,6 +12,7 @@ class Graph:
         self.size = size
         self.matrix = [[0 for x in range(self.size)] for x in range(self.size)]
         self.vertices = {}
+        self.graph = {}
 
     def display_matrix(self):
         print("  ", end="")
@@ -53,10 +54,41 @@ class Graph:
             if self.add_edge(y, x):
                 num_of_vertices -= 1
 
+    def topological_sort(self):
+        visited = [0]*self.size
+        tp_sorted = []
+        while 0 in visited:
+            idx = visited.index(0)
+            self.ts(idx,visited,tp_sorted)
+        return tp_sorted[::-1]
+
+
+
+    def ts(self,v,visited,tp_sorted):
+        visited[v]=1
+        for num in range(self.size):
+            if visited[num]==0 and self.matrix[v][num]==1:
+                self.ts(num, visited, tp_sorted)
+        tp_sorted.append(v)
+
 
 v = Vertex("A")
-g = Graph(10)
-print(g.display())
+g = Graph(11)
+g.add_edge(0, 1)
+g.add_edge(0, 5)
+g.add_edge(1, 2)
+g.add_edge(1, 7)
+g.add_edge(1, 5)
+g.add_edge(2, 6)
+g.add_edge(2, 9)
+g.add_edge(3, 4)
+g.add_edge(4, 5)
+g.add_edge(4, 2)
+g.add_edge(6, 7)
+g.add_edge(8, 1)
+g.add_edge(8, 9)
+g.add_edge(8, 2)
+g.add_edge(10, 3)
+g.add_edge(10, 8)
 g.display_matrix()
-g.fill_graph(60)
-g.display_matrix()
+print(g.topological_sort())
